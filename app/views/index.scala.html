@@ -13,6 +13,13 @@
           <button data-bind="click: vm.onSubmit" class="btn btn-success">Add Name</button>
           <button data-bind="click: vm.getAllNames" class="btn btn-success">Get Names</button>
         </form>
+        <form action="" class="text-center mt-5">
+          <div class="form-group row">
+            <label for="id" class="col-md-2">ID: </label>
+            <input class="form-control col-md-10" type="text" id="id" data-bind="value: vm.id">
+          </div>
+          <button data-bind="click: vm.delete" class="btn btn-success">Delete Name</button>
+        </form>
 
         <table class="table table-bordered table-hover mt-5" data-bind="visible: vm.getList().length > 0">
           <thead>

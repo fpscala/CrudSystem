@@ -34,6 +34,8 @@ trait ExampleDao {
   def create(data: Example): Future[Int]
 
   def getAll: Future[Seq[Example]]
+
+  def delete(id: Int): Future[Int]
 }
 
 @Singleton
@@ -60,6 +62,12 @@ class ExampleDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   override def getAll: Future[Seq[Example]] = {
     db.run {
       examplesTable.result
+    }
+  }
+
+  override def delete(id: Int): Future[Int] = {
+    db.run{
+      examplesTable.filter(_.id === id).delete
     }
   }
 }

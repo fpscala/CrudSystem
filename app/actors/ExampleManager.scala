@@ -26,9 +26,9 @@ class ExampleManager @Inject()(val environment: Environment,
     //
     //    case Update(group) =>
     //      update(group).pipeTo(sender())
-    //
-    //    case Delete(id) =>
-    //      delete(id).pipeTo(sender())
+
+        case Delete(id) =>
+          delete(id).pipeTo(sender())
 
         case GetList =>
           getList.pipeTo(sender())
@@ -40,7 +40,12 @@ class ExampleManager @Inject()(val environment: Environment,
     log.warning(s"daoga yuborildi: $data")
     exampleDao.create(data)
   }
+
   private def getList: Future[Seq[Example]] = {
     exampleDao.getAll
+  }
+
+  private def delete(id: Int): Future[Int] = {
+    exampleDao.delete(id)
   }
 }

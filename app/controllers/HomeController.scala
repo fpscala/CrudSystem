@@ -6,7 +6,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import org.webjars.play.WebJarsUtil
 import play.api.mvc._
-import protocols.ExampleProtocol.{Create, Example, GetList}
+import protocols.ExampleProtocol.{Create, Delete, Example, GetList}
 import views.html._
 import akka.pattern.ask
 import play.api.libs.json.{JsValue, Json}
@@ -43,4 +43,16 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
      Ok(Json.toJson(name))
    }
  }
+
+  def delete = Action.async(parse.json) { implicit request =>
+    val id = (request.body \ "id").as[Int]
+    (exampleManager ? Delete(id)).mapTo[Int].map{ i =>
+      if (i != 0){
+        Ok(Json.toJson(id + " raqamli ism o`chirildi"))
+      }
+      else {
+        Ok("Bunday raqamli ism topilmadi")
+      }
+    }
+  }
 }

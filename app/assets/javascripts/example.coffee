@@ -6,10 +6,12 @@ $ ->
   apiUrl =
     send: '/create'
     get: '/get'
+    delete: '/delete'
 
   vm = ko.mapping.fromJS
     name: ''
     getList: []
+    id: 0
 
   handleError = (error) ->
     if error.status is 500 or (error.status is 400 and error.responseText)
@@ -45,5 +47,17 @@ $ ->
       vm.getList(response)
       console.log('2: ', vm.getList().length)
 
+  vm.delete = ->
+    data =
+      id: parseInt(vm.id())
+    $.ajax
+      url: apiUrl.delete
+      type: 'DELETE'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (response) ->
+      toastr.success(response)
 
   ko.applyBindings {vm}
