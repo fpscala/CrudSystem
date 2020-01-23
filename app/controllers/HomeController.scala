@@ -6,10 +6,10 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import org.webjars.play.WebJarsUtil
 import play.api.mvc._
-import protocols.ExampleProtocol.{Create, Example}
+import protocols.ExampleProtocol.{Create, Example, GetList}
 import views.html._
 import akka.pattern.ask
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
@@ -30,11 +30,17 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   }
 
 
-  def create = Action.async(parse.json) { implicit request =>
+  def create: Action[JsValue] = Action.async(parse.json) { implicit request =>
     val name = (request.body \ "name").as[String]
     logger.warn(s"controllerga keldi")
     (exampleManager ? Create(Example(None, name))).mapTo[Int].map { id =>
         Ok(Json.toJson(id))
     }
   }
+
+ def getNames: Action[AnyContent] = Action.async {
+   (exampleManager ? GetList).mapTo[Seq[Example]].map{ name =>
+     Ok(Json.toJson(name))
+   }
+ }
 }

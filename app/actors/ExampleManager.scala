@@ -6,7 +6,7 @@ import akka.util.Timeout
 import dao.ExampleDao
 import javax.inject.Inject
 import play.api.Environment
-import protocols.ExampleProtocol.{Create, Example}
+import protocols.ExampleProtocol._
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,9 +29,9 @@ class ExampleManager @Inject()(val environment: Environment,
     //
     //    case Delete(id) =>
     //      delete(id).pipeTo(sender())
-    //
-    //    case GetList =>
-    //      getList.pipeTo(sender())
+
+        case GetList =>
+          getList.pipeTo(sender())
 
     case _ => log.info(s"received unknown message")
   }
@@ -39,5 +39,8 @@ class ExampleManager @Inject()(val environment: Environment,
   private def create(data: Example): Future[Int] = {
     log.warning(s"daoga yuborildi: $data")
     exampleDao.create(data)
+  }
+  private def getList: Future[Seq[Example]] = {
+    exampleDao.getAll
   }
 }
