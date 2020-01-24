@@ -20,6 +20,17 @@
           </div>
           <button data-bind="click: vm.delete" class="btn btn-success">Delete Name</button>
         </form>
+        <form action="" class="text-center mt-5">
+          <div class="form-group row">
+            <label for="idForUpdate" class="col-md-2">ID: </label>
+            <input class="form-control col-md-10" type="text" id="idForUpdate" data-bind="value: vm.id">
+          </div>
+          <div class="form-group row">
+            <label for="nameForUpdate" class="col-md-2">Name: </label>
+            <input class="form-control col-md-10" type="text" id="nameForUpdate" data-bind="value: vm.name">
+          </div>
+          <button data-bind="click: vm.update" class="btn btn-success">Update Name</button>
+        </form>
 
         <table class="table table-bordered table-hover mt-5" data-bind="visible: vm.getList().length > 0">
           <thead>

@@ -1,7 +1,5 @@
 package dao
 
-import java.util.Date
-
 import akka.actor.ActorSystem
 import com.google.inject.ImplementedBy
 import com.typesafe.scalalogging.LazyLogging
@@ -36,6 +34,8 @@ trait ExampleDao {
   def getAll: Future[Seq[Example]]
 
   def delete(id: Int): Future[Int]
+
+  def update(data: Example): Future[Int]
 }
 
 @Singleton
@@ -66,8 +66,14 @@ class ExampleDaoImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   }
 
   override def delete(id: Int): Future[Int] = {
-    db.run{
+    db.run {
       examplesTable.filter(_.id === id).delete
+    }
+  }
+
+  override def update(data: Example): Future[Int] = {
+    db.run {
+      examplesTable.filter(_.id === data.id).update(data)
     }
   }
 }

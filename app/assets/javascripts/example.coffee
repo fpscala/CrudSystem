@@ -7,6 +7,7 @@ $ ->
     send: '/create'
     get: '/get'
     delete: '/delete'
+    update: '/update'
 
   vm = ko.mapping.fromJS
     name: ''
@@ -53,6 +54,20 @@ $ ->
     $.ajax
       url: apiUrl.delete
       type: 'DELETE'
+      data: JSON.stringify(data)
+      dataType: 'json'
+      contentType: 'application/json'
+    .fail handleError
+    .done (response) ->
+      toastr.success(response)
+
+  vm.update = ->
+    data =
+      id: parseInt(vm.id())
+      name: vm.name()
+    $.ajax
+      url: apiUrl.update
+      type: 'POST'
       data: JSON.stringify(data)
       dataType: 'json'
       contentType: 'application/json'

@@ -6,7 +6,7 @@ import com.typesafe.scalalogging.LazyLogging
 import javax.inject._
 import org.webjars.play.WebJarsUtil
 import play.api.mvc._
-import protocols.ExampleProtocol.{Create, Delete, Example, GetList}
+import protocols.ExampleProtocol.{Create, Delete, Example, GetList, Update}
 import views.html._
 import akka.pattern.ask
 import play.api.libs.json.{JsValue, Json}
@@ -49,6 +49,19 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     (exampleManager ? Delete(id)).mapTo[Int].map{ i =>
       if (i != 0){
         Ok(Json.toJson(id + " raqamli ism o`chirildi"))
+      }
+      else {
+        Ok("Bunday raqamli ism topilmadi")
+      }
+    }
+  }
+
+  def update = Action.async(parse.json) { implicit request =>
+    val id = (request.body \ "id").as[Int]
+    val name = (request.body \ "name").as[String]
+    (exampleManager ? Update(Example(Some(id), name))).mapTo[Int].map{ i =>
+      if (i != 0){
+        Ok(Json.toJson(id + " raqamli ism yangilandi"))
       }
       else {
         Ok("Bunday raqamli ism topilmadi")
